@@ -6,7 +6,48 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+    const handleResponse = (xhr) => {
+      const type = xhr.getResponseHeader('Content-Type');
+      let id = "";
+      let msg = "";
+      if(type === "text/xml"){
+        let parser = new DOMParser();
+        let xmlDOC = parser.parseFromString(xhr.response,"text/xml");
+        id = xmlDOC.getElementsByTagName("id")[0].textContent;
+        msg = xmlDOC.getElementsByTagName("message")[0].textContent;
+      }
+      else{
+        let json = JSON.parse(xhr.response);
+        id = json.id;
+        msg = json.msg;
+      }
+      
+      document.querySelector("#msgId").innerHTML = id;
+      document.querySelector("#msgContent").innerHTML = msg;
+      console.dir(xhr.response);
+    };
 
+    const sendAjax = (url, acceptedType) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET',url);
+      xhr.setRequestHeader('Accept',acceptedType);
+      
+      xhr.onload = () => handleResponse(xhr);
+      
+      xhr.send();
+    };
+
+    const init = () => {
+      const typeDropdown = document.querySelector('#type');
+      const pageDropdown = document.querySelector('#page');
+      const sendButton = document.querySelector('#send');
+      
+      const sendResponse = () => sendAjax(pageDropdown.value,typeDropdown.value);
+      
+      sendButton.addEventListener('click',sendResponse);
+    };
+
+    window.onload = init;
   </script>
 </head>
 <body>
@@ -28,6 +69,8 @@
     <button id="send">Send</button>
   </section>
   <section id="content">
+    <h1 id="msgId"></h1>
+    <p id="msgContent"
   </section>
 </body>
 </html>

@@ -46,18 +46,18 @@ const createResponseString = (msg, id, acceptedTypes) => {
   };
 };
 
-const getIndex = (request, response, acceptedTypes, params) => {
+const getIndex = (request, response) => {
   respond(request, response, index, 'text/html', 200);
 };
 
-const getCSS = (request, response, acceptedTypes, params) => {
+const getCSS = (request, response) => {
   respond(request, response, css, 'text/css', 200);
 };
 
-const success = (request, response, acceptedTypes, params) => {
+const success = (request, response, acceptedTypes) => {
   const msg = 'This is a succesful response!';
 
-  const resp = createResponseString(msg, "Success", acceptedTypes);
+  const resp = createResponseString(msg, undefined, acceptedTypes);
   return respond(request, response, resp.content, resp.type, 200);
 };
 
@@ -84,7 +84,7 @@ const unauthorized = (request, response, acceptedTypes, params) => {
   return success(request, response, acceptedTypes, params);
 };
 
-const forbidden = (request, response, acceptedTypes, params) => {
+const forbidden = (request, response, acceptedTypes) => {
   const msg = "You don't have access to this content";
   const id = 'forbidden';
 
@@ -93,7 +93,7 @@ const forbidden = (request, response, acceptedTypes, params) => {
   return respond(request, response, resp.content, resp.type, 403);
 };
 
-const internal = (request, response, acceptedTypes, params) => {
+const internal = (request, response, acceptedTypes) => {
   const msg = 'Internal Server Error... Something went wrong!';
   const id = 'InternalServerError';
 
@@ -102,7 +102,7 @@ const internal = (request, response, acceptedTypes, params) => {
   return respond(request, response, resp.content, resp.type, 500);
 };
 
-const notImplemented = (request, response, acceptedTypes, params) => {
+const notImplemented = (request, response, acceptedTypes) => {
   const msg = 'GET requests for this page not yet implemented';
   const id = 'notImplemented';
 
@@ -111,7 +111,7 @@ const notImplemented = (request, response, acceptedTypes, params) => {
   return respond(request, response, resp.content, resp.type, 501);
 };
 
-const notFound = (request, response, acceptedTypes, params) => {
+const notFound = (request, response, acceptedTypes) => {
   const msg = 'Error 404: resource not found';
   const id = 'notFound';
 

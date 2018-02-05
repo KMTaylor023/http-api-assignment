@@ -8,18 +8,25 @@
   <script type="text/babel">
     const handleResponse = (xhr) => {
       const type = xhr.getResponseHeader('Content-Type');
-      let id = "";
+      let id = undefined;
       let msg = "";
       if(type === "text/xml"){
         let parser = new DOMParser();
         let xmlDOC = parser.parseFromString(xhr.response,"text/xml");
-        id = xmlDOC.getElementsByTagName("id")[0].textContent;
+        if(xmlDOC.getElementsByTagName("id")[0]){
+          id = xmlDOC.getElementsByTagName("id")[0].textContent;
+        }
         msg = xmlDOC.getElementsByTagName("message")[0].textContent;
       }
       else{
         let json = JSON.parse(xhr.response);
         id = json.id;
         msg = json.msg;
+      }
+      
+        
+      if(!id){
+        id = "Success!";
       }
       
       document.querySelector("#msgId").innerHTML = id;
